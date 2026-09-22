@@ -40,6 +40,7 @@ import {
   ListChecks,
   Bus,
 } from 'lucide-react';
+import { InteractiveMapEmbed } from './InteractiveMapEmbed';
 
 interface IndicatorCalculatorProps {
   selectedOutputCode: string;
@@ -673,152 +674,38 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
 
           {/* Sezione Mappa interattiva per l'indicatore 12 (Km di rete cicloturistica fruibile) */}
           {(activeIndicator.code === 'CTX-12' || activeIndicator.name.includes('rete cicloturistica')) && (
-            <div className="mt-4 pt-4 border-t border-purple-200/80 dark:border-purple-900/50 space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Bike className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                    traccia le piste ciclabili sulla mappa
-                  </span>
-                </div>
-                <a
-                  href="https://umap.openstreetmap.fr/it/map/mappa-piste-ciclabili-esistenti-e-potenziali-fonte_1451728"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-purple-700 hover:bg-purple-800 text-white transition-all shadow-xs hover:shadow cursor-pointer"
-                  title="Apri ed edita la mappa su uMap in una nuova scheda"
-                >
-                  <Edit3 className="h-3.5 w-3.5" />
-                  <span>Apri ed edita su uMap</span>
-                  <ExternalLink className="h-3 w-3 ml-0.5" />
-                </a>
-              </div>
-
-              {/* Finestra con anteprima mappa uMap */}
-              <div className="rounded-xl overflow-hidden border border-purple-200 dark:border-purple-800 bg-white dark:bg-zinc-900 shadow-sm">
-                {/* Header informativo della finestra */}
-                <div className="flex items-center justify-between px-3.5 py-2.5 bg-purple-50/90 dark:bg-purple-950/70 border-b border-purple-200 dark:border-purple-800">
-                  <div className="flex items-center gap-2 text-xs font-medium text-purple-900 dark:text-purple-200">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="font-semibold">uMap Anteprima:</span>
-                    <span className="text-purple-700 dark:text-purple-300">
-                      Mappa Piste Ciclabili esistenti e potenziali (Fonte dati: Regione Marche)
-                    </span>
-                  </div>
-                </div>
-
-                {/* Box iframe */}
-                <div className="relative w-full h-[480px] bg-zinc-100 dark:bg-zinc-950">
-                  <iframe
-                    src="https://umap.openstreetmap.fr/it/map/mappa-piste-ciclabili-esistenti-e-potenziali-fonte_1451728"
-                    title="Anteprima mappa uMap Piste Ciclabili esistenti e potenziali"
-                    className="w-full h-full border-0"
-                    allow="geolocation"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </div>
+            <InteractiveMapEmbed
+              embedUrl="https://umap.openstreetmap.fr/it/map/mappa-piste-ciclabili-esistenti-e-potenziali-fonte_1451728"
+              mapTitle="Mappa Piste Ciclabili esistenti e potenziali"
+              sourceLabel="Fonte dati: Regione Marche"
+              externalUrl="https://umap.openstreetmap.fr/it/map/mappa-piste-ciclabili-esistenti-e-potenziali-fonte_1451728"
+              actionTitle="traccia le piste ciclabili sulla mappa"
+              icon={<Bike className="h-4 w-4 text-purple-600 dark:text-purple-400" />}
+            />
           )}
 
           {/* Sezione Mappa interattiva per l'indicatore 13 (Punti di ricarica per mobilità elettrica) */}
           {(activeIndicator.code === 'CTX-13' || activeIndicator.name.includes('Punti di ricarica')) && (
-            <div className="mt-4 pt-4 border-t border-purple-200/80 dark:border-purple-900/50 space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                    inserisci punti di ricarica sulla mappa
-                  </span>
-                </div>
-                <a
-                  href="https://umap.openstreetmap.fr/it/map/mappa-infrastrutture-di-ricarica-elettrica-fonte-d_1449604"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-purple-700 hover:bg-purple-800 text-white transition-all shadow-xs hover:shadow cursor-pointer"
-                  title="Apri ed edita la mappa su uMap in una nuova scheda"
-                >
-                  <Edit3 className="h-3.5 w-3.5" />
-                  <span>Apri ed edita su uMap</span>
-                  <ExternalLink className="h-3 w-3 ml-0.5" />
-                </a>
-              </div>
-
-              {/* Finestra con anteprima mappa uMap */}
-              <div className="rounded-xl overflow-hidden border border-purple-200 dark:border-purple-800 bg-white dark:bg-zinc-900 shadow-sm">
-                {/* Header informativo della finestra */}
-                <div className="flex items-center justify-between px-3.5 py-2.5 bg-purple-50/90 dark:bg-purple-950/70 border-b border-purple-200 dark:border-purple-800">
-                  <div className="flex items-center gap-2 text-xs font-medium text-purple-900 dark:text-purple-200">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="font-semibold">uMap Anteprima:</span>
-                    <span className="text-purple-700 dark:text-purple-300">
-                      Mappa Infrastrutture di ricarica elettrica (Fonte dati: MASE)
-                    </span>
-                  </div>
-                </div>
-
-                {/* Box iframe */}
-                <div className="relative w-full h-[480px] bg-zinc-100 dark:bg-zinc-950">
-                  <iframe
-                    src="https://umap.openstreetmap.fr/it/map/mappa-infrastrutture-di-ricarica-elettrica-fonte-d_1449604"
-                    title="Anteprima mappa uMap Infrastrutture di ricarica elettrica"
-                    className="w-full h-full border-0"
-                    allow="geolocation"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </div>
+            <InteractiveMapEmbed
+              embedUrl="https://umap.openstreetmap.fr/it/map/mappa-infrastrutture-di-ricarica-elettrica-fonte-d_1449604"
+              mapTitle="Mappa Infrastrutture di ricarica elettrica"
+              sourceLabel="Fonte dati: MASE"
+              externalUrl="https://umap.openstreetmap.fr/it/map/mappa-infrastrutture-di-ricarica-elettrica-fonte-d_1449604"
+              actionTitle="inserisci punti di ricarica sulla mappa"
+              icon={<MapPin className="h-4 w-4 text-purple-600 dark:text-purple-400" />}
+            />
           )}
 
           {/* Sezione Mappa interattiva per l'indicatore 11 (Incidenza degli agriturismi) */}
           {(activeIndicator.code === 'CTX-11' || activeIndicator.name.includes('agriturismi')) && (
-            <div className="mt-4 pt-4 border-t border-purple-200/80 dark:border-purple-900/50 space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Hotel className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                    inserisci le strutture ricettive sulla mappa
-                  </span>
-                </div>
-                <a
-                  href="https://umap.openstreetmap.fr/it/map/mappa-strutture-ricettive-fonte-dati-letsmarcheit_1449567"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-purple-700 hover:bg-purple-800 text-white transition-all shadow-xs hover:shadow cursor-pointer"
-                  title="Apri ed edita la mappa su uMap in una nuova scheda"
-                >
-                  <Edit3 className="h-3.5 w-3.5" />
-                  <span>Apri ed edita su uMap</span>
-                  <ExternalLink className="h-3 w-3 ml-0.5" />
-                </a>
-              </div>
-
-              {/* Finestra con anteprima mappa uMap */}
-              <div className="rounded-xl overflow-hidden border border-purple-200 dark:border-purple-800 bg-white dark:bg-zinc-900 shadow-sm">
-                {/* Header informativo della finestra */}
-                <div className="flex items-center justify-between px-3.5 py-2.5 bg-purple-50/90 dark:bg-purple-950/70 border-b border-purple-200 dark:border-purple-800">
-                  <div className="flex items-center gap-2 text-xs font-medium text-purple-900 dark:text-purple-200">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="font-semibold">uMap Anteprima:</span>
-                    <span className="text-purple-700 dark:text-purple-300">
-                      Mappa Strutture Ricettive (Fonte dati: letsmarche.it)
-                    </span>
-                  </div>
-                </div>
-
-                {/* Box iframe */}
-                <div className="relative w-full h-[480px] bg-zinc-100 dark:bg-zinc-950">
-                  <iframe
-                    src="https://umap.openstreetmap.fr/it/map/mappa-strutture-ricettive-fonte-dati-letsmarcheit_1449567"
-                    title="Anteprima mappa uMap Strutture Ricettive"
-                    className="w-full h-full border-0"
-                    allow="geolocation"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </div>
+            <InteractiveMapEmbed
+              embedUrl="https://umap.openstreetmap.fr/it/map/mappa-strutture-ricettive-fonte-dati-letsmarcheit_1449567"
+              mapTitle="Mappa Strutture Ricettive"
+              sourceLabel="Fonte dati: letsmarche.it"
+              externalUrl="https://umap.openstreetmap.fr/it/map/mappa-strutture-ricettive-fonte-dati-letsmarcheit_1449567"
+              actionTitle="inserisci le strutture ricettive sulla mappa"
+              icon={<Hotel className="h-4 w-4 text-purple-600 dark:text-purple-400" />}
+            />
           )}
       </div>
 

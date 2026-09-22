@@ -6,6 +6,8 @@ import { TrendDashboard } from './components/TrendDashboard';
 import { DataManagement } from './components/DataManagement';
 import { HelpModal } from './components/HelpModal';
 import { AddYearModal } from './components/AddYearModal';
+import { PrivacyBannerAndModal } from './components/PrivacyBannerAndModal';
+import { ShieldCheck } from 'lucide-react';
 import { IndicatorRecord, MunicipalityName, MUNICIPALITIES } from './types';
 import { INITIAL_SAMPLE_RECORDS } from './data/sampleHistory';
 import { getAllCalculableIndicators } from './data/matrixData';
@@ -33,6 +35,7 @@ export default function App() {
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
   const [isAddYearModalOpen, setIsAddYearModalOpen] = useState<boolean>(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState<boolean>(false);
 
   // Custom years added by the user beyond baseline
   const [customYears, setCustomYears] = useState<number[]>(() => loadCustomYearsFromStorage());
@@ -314,7 +317,19 @@ export default function App() {
             </span>{' '}
             — Montecassiano · Montefano · Montelupone
           </div>
-          <div>Sistema di calcolo e monitoraggio temporale e benchmarking intercomunale</div>
+          <div className="flex flex-wrap items-center gap-3">
+            <span>Sistema di monitoraggio temporale e benchmarking intercomunale</span>
+            <span className="hidden sm:inline text-zinc-300 dark:text-zinc-700">|</span>
+            <button
+              type="button"
+              id="footer-privacy-btn"
+              onClick={() => setIsPrivacyModalOpen(true)}
+              className="inline-flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300 hover:underline cursor-pointer"
+            >
+              <ShieldCheck className="h-3.5 w-3.5" />
+              <span>Informativa Privacy & Risorse Esterne (PA)</span>
+            </button>
+          </div>
         </div>
       </footer>
 
@@ -327,6 +342,12 @@ export default function App() {
         onClose={() => setIsAddYearModalOpen(false)}
         onAddYear={handleAddYear}
         availableYears={availableYears}
+      />
+
+      {/* Privacy Banner & Modal conforme PA */}
+      <PrivacyBannerAndModal
+        isModalOpen={isPrivacyModalOpen}
+        setIsModalOpen={setIsPrivacyModalOpen}
       />
     </div>
   );
