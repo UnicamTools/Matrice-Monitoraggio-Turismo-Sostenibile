@@ -1548,17 +1548,12 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
 
               <div className="flex items-baseline gap-2">
                 {isNotAvailable ? (
-                  <div className="space-y-1">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-4xl sm:text-5xl font-black tracking-tight text-amber-400">
-                        n.d.
-                      </span>
-                      <span className="text-xs font-semibold text-zinc-400">
-                        ({activeIndicator.unit})
-                      </span>
-                    </div>
-                    <span className="text-xs font-medium text-amber-300 block">
-                      Dato non disponibile per l&apos;anno {selectedYear}
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl sm:text-5xl font-black tracking-tight text-amber-400">
+                      n.d.
+                    </span>
+                    <span className="text-xs font-semibold text-zinc-400">
+                      ({activeIndicator.unit})
                     </span>
                   </div>
                 ) : (
