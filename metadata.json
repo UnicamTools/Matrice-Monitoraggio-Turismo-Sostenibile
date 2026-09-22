@@ -1,0 +1,10 @@
+{
+  "name": "Matrice Monitoraggio Turismo Sostenibile_ER01_CP18",
+  "description": "Tool interattivo per la consultazione della matrice di sostenibilità turistica, il calcolo degli indicatori di output e il monitoraggio dei trend nel tempo.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/* Colore di sfondo dinamico per Ente attivo */
+.bg-municipality-montecassiano {
+  background-color: #e8f1fc;
+}
+@media (prefers-color-scheme: dark) {
+  .bg-municipality-montecassiano {
+    background-color: #0c1626;
+  }
+}
+.dark .bg-municipality-montecassiano {
+  background-color: #0c1626;
+}
+
+.bg-municipality-montefano {
+  background-color: #fef7dc;
+}
+@media (prefers-color-scheme: dark) {
+  .bg-municipality-montefano {
+    background-color: #1d1708;
+  }
+}
+.dark .bg-municipality-montefano {
+  background-color: #1d1708;
+}
+
+.bg-municipality-montelupone {
+  background-color: #fde8e8;
+}
+@media (prefers-color-scheme: dark) {
+  .bg-municipality-montelupone {
+    background-color: #210c10;
+  }
+}
+.dark .bg-municipality-montelupone {
+  background-color: #210c10;
+}
