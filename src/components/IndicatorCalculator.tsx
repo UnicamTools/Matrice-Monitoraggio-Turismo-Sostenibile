@@ -472,50 +472,6 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
           </div>
         </div>
 
-        {/* Municipality Selector Bar (Identico a TrendDashboard) */}
-        <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-zinc-500 dark:text-zinc-400">Utente / Ente in compilazione:</span>
-            <span
-              className="font-extrabold px-2.5 py-1 rounded-lg border flex items-center gap-1.5"
-              style={{
-                backgroundColor: `${activeMunInfo.colorHex}15`,
-                borderColor: `${activeMunInfo.colorHex}40`,
-                color: activeMunInfo.colorHex,
-              }}
-            >
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeMunInfo.colorHex }} />
-              <span>{selectedMunicipality}</span>
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-zinc-400 hidden sm:inline">Passa a:</span>
-            {MUNICIPALITIES.map((mun) => {
-              const isSel = selectedMunicipality === mun.name;
-              return (
-                <button
-                  key={mun.id}
-                  type="button"
-                  onClick={() => setSelectedMunicipality(mun.name)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    isSel
-                      ? 'ring-2 shadow-xs bg-white dark:bg-zinc-900'
-                      : 'bg-zinc-50 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-700'
-                  }`}
-                  style={{
-                    borderColor: isSel ? mun.colorHex : undefined,
-                    color: isSel ? (mun.textHex || mun.colorHex) : undefined,
-                  }}
-                >
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: mun.colorHex }} />
-                  <span>{mun.shortName}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
         {/* Macro Structure Switcher (Analisi di Contesto vs Prospettive di Intervento) */}
         <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button

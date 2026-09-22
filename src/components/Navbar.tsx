@@ -73,38 +73,50 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Right Controls: Utente / Comune Selector + Year + Stats */}
           <div className="flex flex-wrap items-center justify-between md:justify-end gap-2.5 border-t md:border-t-0 pt-2.5 md:pt-0 border-zinc-100 dark:border-zinc-800">
-            {/* Selettore Utente / Comune */}
-            <div className="flex items-center gap-2 bg-amber-50/90 dark:bg-amber-950/40 px-3 py-1.5 rounded-xl border border-amber-200 dark:border-amber-800/60">
+            {/* Selettore Utente / Comune con sotto-etichetta colorata del Comune */}
+            <div className="flex items-center gap-2 bg-amber-50/90 dark:bg-amber-950/40 px-2.5 sm:px-3 py-1.5 rounded-xl border border-amber-200 dark:border-amber-800/60 shadow-2xs">
               <div className="flex items-center gap-1.5">
                 <Building2 className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                 <span className="text-xs font-bold text-amber-900 dark:text-amber-200 hidden sm:inline">
                   Utente / Ente:
                 </span>
               </div>
-              <div className="relative inline-block">
-                <select
-                  value={selectedMunicipality}
-                  onChange={(e) => setSelectedMunicipality(e.target.value as MunicipalityName)}
-                  className="bg-transparent text-xs sm:text-sm font-black text-amber-950 dark:text-amber-100 pr-5 focus:outline-none cursor-pointer"
-                >
-                  {MUNICIPALITIES.map((mun) => (
-                    <option
-                      key={mun.id}
-                      value={mun.name}
-                      className="text-zinc-900 bg-white dark:bg-zinc-900 dark:text-zinc-100"
-                    >
-                      {mun.name}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+              {/* Sotto-etichetta interna colorata con il colore specifico del Comune */}
+              <div
+                className="relative inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border transition-all duration-150"
+                style={{
+                  backgroundColor: `${currentMunInfo.colorHex}18`,
+                  borderColor: `${currentMunInfo.colorHex}55`,
+                }}
+              >
+                <span
+                  className="w-2 h-2 rounded-full shrink-0 shadow-xs"
+                  style={{ backgroundColor: currentMunInfo.colorHex }}
+                />
+                <div className="relative inline-block pr-4">
+                  <select
+                    value={selectedMunicipality}
+                    onChange={(e) => setSelectedMunicipality(e.target.value as MunicipalityName)}
+                    className="bg-transparent text-xs sm:text-sm font-black pr-1 focus:outline-none cursor-pointer"
+                    style={{ color: currentMunInfo.textHex || currentMunInfo.colorHex }}
+                    title="Seleziona Utente / Ente"
+                  >
+                    {MUNICIPALITIES.map((mun) => (
+                      <option
+                        key={mun.id}
+                        value={mun.name}
+                        className="text-zinc-900 bg-white dark:bg-zinc-900 dark:text-zinc-100 font-bold"
+                      >
+                        {mun.name}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-3.5 w-3.5"
+                    style={{ color: currentMunInfo.textHex || currentMunInfo.colorHex }}
+                  />
+                </div>
               </div>
-              {/* Colored pill indicator */}
-              <span
-                className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
-                style={{ backgroundColor: currentMunInfo.colorHex }}
-                title={`Utente attivo: ${currentMunInfo.name}`}
-              />
             </div>
 
             {/* Selettore Anno con opzione integrata in fondo per aggiungere annualità */}
