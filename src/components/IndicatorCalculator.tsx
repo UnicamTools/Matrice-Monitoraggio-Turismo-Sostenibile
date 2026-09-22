@@ -590,89 +590,72 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
       {/* Card Dettaglio Indicatore e Formula di Calcolo */}
       <div className={`rounded-2xl border-2 p-5 sm:p-6 space-y-4 shadow-sm ${
         activeIndicator.level === 'context'
-          ? 'bg-purple-50/40 border-purple-300 dark:bg-purple-950/20 dark:border-purple-800'
-          : 'bg-emerald-50/40 border-emerald-300 dark:bg-emerald-950/20 dark:border-emerald-800'
+          ? 'bg-purple-100 border-purple-300 dark:bg-purple-950 dark:border-purple-800'
+          : 'bg-emerald-100 border-emerald-300 dark:bg-emerald-950 dark:border-emerald-800'
       }`}>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="space-y-2">
-              <div className="flex flex-wrap items-center gap-2">
-                {/* Level Pill */}
-                <span className={`inline-flex items-center gap-1.5 font-mono text-xs font-bold px-2.5 py-1 rounded-md border ${
-                  activeIndicator.level === 'context'
-                    ? 'bg-purple-600 text-white border-purple-700 shadow-xs'
-                    : 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
-                }`}>
-                  {activeIndicator.level === 'context' ? (
-                    <>
-                      <Layers className="h-3.5 w-3.5" />
-                      <span>Indicatore di Contesto</span>
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="h-3.5 w-3.5" />
-                      <span>Indicatore di Output degli interventi</span>
-                    </>
-                  )}
-                </span>
-
-                {activeIndicator.level === 'output' && (
-                  <span className="font-mono text-xs font-bold text-zinc-800 bg-white px-2 py-1 rounded border border-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700">
-                    {activeIndicator.code}
-                  </span>
-                )}
-
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                  {activeIndicator.name}
-                </h3>
-              </div>
-
-              {/* Dimension reference UNDER indicator name for Context Indicators */}
-              {activeIndicator.level === 'context' && (
-                <div>
-                  <span className="inline-block text-xs font-bold px-2.5 py-1 rounded-md bg-purple-100 text-purple-900 border border-purple-200 dark:bg-purple-950 dark:text-purple-200 dark:border-purple-800">
-                    Dimensione {currentDimension?.number}: {currentDimension?.title}
-                  </span>
-                </div>
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Level Pill */}
+            <span className={`inline-flex items-center gap-1.5 font-mono text-xs font-bold px-2.5 py-1 rounded-md border ${
+              activeIndicator.level === 'context'
+                ? 'bg-purple-600 text-white border-purple-700 shadow-xs'
+                : 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
+            }`}>
+              {activeIndicator.level === 'context' ? (
+                <>
+                  <Layers className="h-3.5 w-3.5" />
+                  <span>Indicatore di Contesto</span>
+                </>
+              ) : (
+                <>
+                  <Zap className="h-3.5 w-3.5" />
+                  <span>Indicatore di Output degli interventi</span>
+                </>
               )}
-            </div>
+            </span>
 
-            {/* Direction reference for Output Indicators */}
             {activeIndicator.level === 'output' && (
-              <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-900 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-200 dark:border-emerald-800">
-                {activeIndicator.direzioneTitle || (currentDimension ? `Direzione Dimensione ${currentDimension.number}` : '')}
+              <span className="font-mono text-xs font-bold text-zinc-800 bg-white px-2 py-1 rounded border border-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700">
+                {activeIndicator.code}
               </span>
             )}
+
+            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              {activeIndicator.name}
+            </h3>
           </div>
 
-          <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            {activeIndicator.description}
-          </p>
-
-          {/* Context Informative Banner */}
-          {activeIndicator.level === 'context' && (
-            <div className="flex items-start gap-2 text-xs bg-purple-100/70 dark:bg-purple-900/40 text-purple-900 dark:text-purple-200 p-3 rounded-lg border border-purple-200 dark:border-purple-800">
-              <Info className="h-4 w-4 shrink-0 text-purple-600 dark:text-purple-400 mt-0.5" />
-              <div>
-                <strong>Profilo Comunale:</strong>{' '}
-                <span className="text-purple-800 dark:text-purple-300">
-                  Questo indicatore descrive il profilo del Comune dal punto di vista delle performance legate al turismo
+          {/* Unica etichetta: Dimensione/Direzione + Profilo Comunale/Intervento */}
+          {activeIndicator.level === 'context' ? (
+            <div className="flex items-start sm:items-center gap-2.5 text-xs py-2 px-3 rounded-xl bg-purple-200/90 dark:bg-purple-900/70 text-purple-950 dark:text-purple-100 border border-purple-300 dark:border-purple-700 shadow-xs">
+              <Info className="h-4 w-4 shrink-0 text-purple-700 dark:text-purple-300 mt-0.5 sm:mt-0" />
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="font-extrabold uppercase tracking-wide px-2 py-0.5 rounded bg-purple-300/80 dark:bg-purple-800 text-purple-950 dark:text-purple-100 text-[11px] border border-purple-400/50 dark:border-purple-600">
+                  Dimensione {currentDimension?.number}: {currentDimension?.title}
+                </span>
+                <span className="text-purple-950 dark:text-purple-200 font-medium">
+                  <strong>Profilo Comunale:</strong> Questo indicatore descrive il profilo del Comune dal punto di vista delle performance legate al turismo
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-start sm:items-center gap-2.5 text-xs py-2 px-3 rounded-xl bg-emerald-200/90 dark:bg-emerald-900/70 text-emerald-950 dark:text-emerald-100 border border-emerald-300 dark:border-emerald-700 shadow-xs">
+              <Target className="h-4 w-4 shrink-0 text-emerald-700 dark:text-emerald-300 mt-0.5 sm:mt-0" />
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="font-extrabold uppercase tracking-wide px-2 py-0.5 rounded bg-emerald-300/80 dark:bg-emerald-800 text-emerald-950 dark:text-emerald-100 text-[11px] border border-emerald-400/50 dark:border-emerald-600">
+                  {activeIndicator.direzioneTitle || (currentDimension ? `Direzione Dimensione ${currentDimension.number}` : '')}
+                </span>
+                <span className="text-emerald-950 dark:text-emerald-200 font-medium">
+                  <strong>Indicatore mirato all&apos;intervento:</strong> {activeIndicator.interventionTitle || activeIndicator.parentContextName}
                 </span>
               </div>
             </div>
           )}
+        </div>
 
-          {/* Output Informative Banner */}
-          {activeIndicator.level === 'output' && (
-            <div className="flex items-start gap-2 text-xs bg-emerald-100/60 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-200 p-3 rounded-lg border border-emerald-200 dark:border-emerald-800">
-              <Target className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-              <div>
-                <strong>Indicatore mirato all&apos;intervento:</strong>{' '}
-                <span className="font-medium text-emerald-950 dark:text-emerald-100">
-                  {activeIndicator.interventionTitle || activeIndicator.parentContextName}
-                </span>
-              </div>
-            </div>
-          )}
+        <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
+          {activeIndicator.description}
+        </p>
 
           {/* Formula Display */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs font-mono bg-white/90 dark:bg-zinc-900/90 p-2.5 rounded-lg border border-zinc-200/80 dark:border-zinc-800">

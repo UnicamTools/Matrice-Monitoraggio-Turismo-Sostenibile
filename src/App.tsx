@@ -29,7 +29,7 @@ import {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'matrix' | 'calculator' | 'trend' | 'data'>('matrix');
-  const [selectedOutputCode, setSelectedOutputCode] = useState<string>('TCOE');
+  const [selectedOutputCode, setSelectedOutputCode] = useState<string>('CTX-1');
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
   const [isAddYearModalOpen, setIsAddYearModalOpen] = useState<boolean>(false);

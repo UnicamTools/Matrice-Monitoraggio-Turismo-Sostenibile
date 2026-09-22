@@ -505,17 +505,17 @@ export const DataManagement: React.FC<DataManagementProps> = ({
           <div className="flex flex-col gap-2 pt-2">
             <button
               onClick={handleExportJSON}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shadow-sm shadow-amber-600/20 transition-colors cursor-pointer ring-1 ring-amber-500"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 dark:text-amber-200 font-bold text-xs border-2 border-amber-500 shadow-sm transition-colors cursor-pointer"
             >
-              <Download className="h-4 w-4" />
+              <Download className="h-4 w-4 text-amber-700 dark:text-amber-400" />
               <span>Esporta in JSON</span>
             </button>
 
             <button
               onClick={handleExportCSV}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shadow-sm shadow-amber-600/20 transition-colors cursor-pointer ring-1 ring-amber-500"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 dark:text-amber-200 font-bold text-xs border-2 border-amber-500 shadow-sm transition-colors cursor-pointer"
             >
-              <FileSpreadsheet className="h-4 w-4" />
+              <FileSpreadsheet className="h-4 w-4 text-amber-700 dark:text-amber-400" />
               <span>Esporta in CSV (Excel)</span>
             </button>
           </div>
@@ -550,9 +550,9 @@ export const DataManagement: React.FC<DataManagementProps> = ({
           <div className="pt-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shadow-sm shadow-amber-600/20 transition-colors cursor-pointer ring-1 ring-amber-500"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 dark:text-amber-200 font-bold text-xs border-2 border-amber-500 shadow-sm transition-colors cursor-pointer"
             >
-              <Upload className="h-4 w-4" />
+              <Upload className="h-4 w-4 text-amber-700 dark:text-amber-400" />
               <span>Seleziona File JSON</span>
             </button>
           </div>
@@ -592,17 +592,17 @@ export const DataManagement: React.FC<DataManagementProps> = ({
                   setTimeout(() => setNotification(''), 3500);
                 }
               }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shadow-sm shadow-amber-600/20 transition-colors cursor-pointer ring-1 ring-amber-500"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 dark:text-amber-200 font-bold text-xs border-2 border-amber-500 shadow-sm transition-colors cursor-pointer"
             >
-              <RefreshCw className="h-4 w-4" />
+              <RefreshCw className="h-4 w-4 text-amber-700 dark:text-amber-400" />
               <span>Ripristina Dataset Iniziale ({demoCount} Rilevazioni)</span>
             </button>
 
             <button
               onClick={handleCopyJSON}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shadow-sm shadow-amber-600/20 transition-colors cursor-pointer ring-1 ring-amber-500"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 dark:bg-amber-950/40 dark:hover:bg-amber-900/60 dark:text-amber-200 font-bold text-xs border-2 border-amber-500 shadow-sm transition-colors cursor-pointer"
             >
-              {copied ? <Check className="h-4 w-4 text-emerald-200" /> : <Copy className="h-4 w-4" />}
+              {copied ? <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="h-4 w-4 text-amber-700 dark:text-amber-400" />}
               <span>{copied ? 'JSON Copiato!' : `Copia JSON (${records.length} record) negli appunti`}</span>
             </button>
           </div>
