@@ -1484,19 +1484,6 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
           )}
         </div>
       )}
-
-      {/* PANNELLO ORIZZONTALE PER INDICATORI DI OUTPUT: AZIONE / LINEA STRATEGICA DI RIFERIMENTO */}
-      {activeIndicator.level === 'output' && activeIndicator.objective && (
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-            <Target className="h-4 w-4" />
-            <span>Azione / Linea Strategica di Riferimento</span>
-          </div>
-          <p className="text-xs sm:text-sm font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed bg-emerald-50/60 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
-            {activeIndicator.objective}
-          </p>
-        </div>
-      )}
     </div>
   );
 };
