@@ -335,18 +335,6 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
     }
   };
 
-  // Preset scenarios
-  const applyPresetScenario = (multiplier: number) => {
-    if (isNotAvailable) {
-      setIsNotAvailable(false);
-    }
-    const updated: Record<string, number> = {};
-    activeIndicator.params.forEach((p) => {
-      updated[p.key] = Math.round(p.defaultValue * multiplier * 10) / 10;
-    });
-    setParamValues(updated);
-  };
-
   // Reset to default parameters
   const handleReset = () => {
     setIsNotAvailable(activeIndicator.level === 'output');
@@ -515,13 +503,13 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
       {/* Card Dettaglio Indicatore e Formula di Calcolo */}
       <div className={`rounded-2xl border-2 p-5 sm:p-6 space-y-4 shadow-sm ${
         activeIndicator.level === 'context'
-          ? 'bg-purple-100 border-purple-300 dark:bg-purple-950 dark:border-purple-800'
-          : 'bg-emerald-100 border-emerald-300 dark:bg-emerald-950 dark:border-emerald-800'
+          ? 'bg-purple-100/90 border-purple-300 dark:bg-purple-950/60 dark:border-purple-800'
+          : 'bg-emerald-100/90 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-800'
       }`}>
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-2">
             {/* Level Pill */}
-            <span className={`inline-flex items-center gap-1.5 font-mono text-xs font-bold px-2.5 py-1 rounded-md border ${
+            <span className={`inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border ${
               activeIndicator.level === 'context'
                 ? 'bg-purple-600 text-white border-purple-700 shadow-xs'
                 : 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
@@ -539,23 +527,17 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
               )}
             </span>
 
-            {activeIndicator.level === 'output' && (
-              <span className="font-mono text-xs font-bold text-zinc-800 bg-white px-2 py-1 rounded border border-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700">
-                {activeIndicator.code}
-              </span>
-            )}
-
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+            <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
               {activeIndicator.name}
             </h3>
           </div>
 
           {/* Unica etichetta: Dimensione/Direzione + Profilo Comunale/Intervento */}
           {activeIndicator.level === 'context' ? (
-            <div className="flex items-start sm:items-center gap-2.5 text-xs py-2 px-3 rounded-xl bg-purple-200/90 dark:bg-purple-900/70 text-purple-950 dark:text-purple-100 border border-purple-300 dark:border-purple-700 shadow-xs">
+            <div className="flex items-start sm:items-center gap-2.5 text-xs py-2 px-3 rounded-xl bg-white/80 dark:bg-zinc-900/80 text-purple-950 dark:text-purple-100 border border-purple-200/90 dark:border-purple-800/80 shadow-2xs">
               <Info className="h-4 w-4 shrink-0 text-purple-700 dark:text-purple-300 mt-0.5 sm:mt-0" />
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span className="font-extrabold uppercase tracking-wide px-2 py-0.5 rounded bg-purple-300/80 dark:bg-purple-800 text-purple-950 dark:text-purple-100 text-[11px] border border-purple-400/50 dark:border-purple-600">
+                <span className="font-extrabold uppercase tracking-wide px-2 py-0.5 rounded bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 text-[11px] border border-purple-200 dark:border-purple-800/60">
                   Dimensione {currentDimension?.number}: {currentDimension?.title}
                 </span>
                 <span className="text-purple-950 dark:text-purple-200 font-medium">
@@ -564,10 +546,10 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
               </div>
             </div>
           ) : (
-            <div className="flex items-start sm:items-center gap-2.5 text-xs py-2 px-3 rounded-xl bg-emerald-200/90 dark:bg-emerald-900/70 text-emerald-950 dark:text-emerald-100 border border-emerald-300 dark:border-emerald-700 shadow-xs">
+            <div className="flex items-start sm:items-center gap-2.5 text-xs py-2 px-3 rounded-xl bg-white/80 dark:bg-zinc-900/80 text-emerald-950 dark:text-emerald-100 border border-emerald-200/90 dark:border-emerald-800/80 shadow-2xs">
               <Target className="h-4 w-4 shrink-0 text-emerald-700 dark:text-emerald-300 mt-0.5 sm:mt-0" />
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span className="font-extrabold uppercase tracking-wide px-2 py-0.5 rounded bg-emerald-300/80 dark:bg-emerald-800 text-emerald-950 dark:text-emerald-100 text-[11px] border border-emerald-400/50 dark:border-emerald-600">
+                <span className="font-extrabold uppercase tracking-wide px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[11px] border border-emerald-200 dark:border-emerald-800/60">
                   {activeIndicator.direzioneTitle || (currentDimension ? `Direzione Dimensione ${currentDimension.number}` : '')}
                 </span>
                 <span className="text-emerald-950 dark:text-emerald-200 font-medium">
@@ -646,41 +628,9 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
               <Sliders className={`h-5 w-5 ${
                 activeIndicator.level === 'context' ? 'text-purple-600' : 'text-emerald-600'
               }`} />
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
                 Variabili & Parametri di Input
               </h3>
-            </div>
-
-            {/* Scenario buttons */}
-            <div className="flex items-center gap-1.5 text-xs">
-              <button
-                disabled={isNotAvailable}
-                onClick={() => applyPresetScenario(0.8)}
-                className="px-2 py-1 rounded bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-                title="Riduci le variabili del 20%"
-              >
-                -20%
-              </button>
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium cursor-pointer"
-                title="Ripristina valori predefiniti"
-              >
-                <RotateCcw className="h-3 w-3" />
-                Reset
-              </button>
-              <button
-                disabled={isNotAvailable}
-                onClick={() => applyPresetScenario(1.25)}
-                className={`px-2 py-1 rounded font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
-                  activeIndicator.level === 'context'
-                    ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300'
-                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300'
-                }`}
-                title="Aumenta le variabili del 25%"
-              >
-                +25% Target
-              </button>
             </div>
           </div>
 
@@ -1261,13 +1211,13 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
             <div>
               <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 flex items-center gap-1">
                 <FileText className="h-3.5 w-3.5 text-amber-600" />
-                Note, Fonti Dati o Riferimenti Delibera ({activeMunInfo.shortName}, {selectedYear}):
+                Note e Riferimenti Dati:
               </label>
               <input
                 type="text"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder={`Es. Dati estratti da ISTAT / Ufficio Tecnico ${activeMunInfo.shortName}, delibera n. 14...`}
+                placeholder={`Es. Dati estratti da ISTAT / Ufficio Tecnico ${activeMunInfo.shortName}, delibera...`}
                 className="w-full text-xs rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-2.5 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:border-amber-500 focus:outline-none"
               />
             </div>
@@ -1292,50 +1242,13 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
               </span>
             </button>
           </div>
-
-          {/* Sub-list of Level 2 Indicators if Level 1 is active */}
-          {activeIndicator.level === 'context' && contextOutputIndicators && contextOutputIndicators.length > 0 && (
-            <div className="border-t border-zinc-100 dark:border-zinc-800 pt-4 space-y-2">
-              <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
-                <Zap className="h-3.5 w-3.5 text-emerald-600" />
-                Indicatori di Output che influiscono su questo Contesto:
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {contextOutputIndicators.map((out) => (
-                  <button
-                    key={out.code}
-                    onClick={() => setSelectedOutputCode(out.code)}
-                    className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-200 bg-zinc-50 hover:bg-emerald-50 hover:border-emerald-300 dark:border-zinc-800 dark:bg-zinc-800 dark:hover:bg-emerald-950/40 text-left transition-colors cursor-pointer group"
-                  >
-                    <div>
-                      {out.name.startsWith(out.code) ? (
-                        <span className="text-xs text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-emerald-800 dark:group-hover:text-emerald-300">
-                          {out.name}
-                        </span>
-                      ) : (
-                        <div>
-                          <span className="font-mono text-[11px] font-bold text-emerald-700 dark:text-emerald-400">
-                            [{out.code}]
-                          </span>{' '}
-                          <span className="text-xs text-zinc-800 dark:text-zinc-200 font-medium group-hover:text-emerald-800 dark:group-hover:text-emerald-300">
-                            {out.name}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-emerald-600 shrink-0 ml-2" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Right: Live Result Card & Target Evaluation (5 cols) */}
         <div className="lg:col-span-5 flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
           <div className="space-y-6">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-amber-500" />
                 Risultato Calcolato
               </h3>
@@ -1346,27 +1259,11 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
 
             {/* Big Score Box */}
             <div className="rounded-2xl bg-gradient-to-br from-zinc-900 to-zinc-800 p-6 text-white shadow-lg space-y-3 dark:from-zinc-950 dark:to-zinc-900 border border-zinc-800">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
-                  Valore Calcolato{activeIndicator.level === 'output' ? ` (${activeIndicator.code})` : ''}
-                </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-                  activeIndicator.level === 'context' ? 'bg-purple-900 text-purple-200' : 'bg-emerald-900 text-emerald-200'
-                }`}>
-                  {activeIndicator.level === 'context' ? 'Analisi di Contesto' : 'Prospettiva Intervento'}
-                </span>
-              </div>
-
               <div className="flex items-baseline gap-2">
                 {isNotAvailable ? (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl sm:text-5xl font-black tracking-tight text-amber-400">
-                      n.d.
-                    </span>
-                    <span className="text-xs font-semibold text-zinc-400">
-                      ({activeIndicator.unit})
-                    </span>
-                  </div>
+                  <span className="text-4xl sm:text-5xl font-black tracking-tight text-amber-400">
+                    n.d.
+                  </span>
                 ) : (
                   <span className={`text-4xl sm:text-5xl font-black tracking-tight ${
                     activeIndicator.level === 'context' ? 'text-purple-300' : 'text-emerald-400'
@@ -1389,7 +1286,7 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
                   </span>
                 ) : (
                   <span className="px-3 py-1 rounded-full text-xs font-semibold border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-                    Target non impostato (definisci liberamente sotto)
+                    Target non impostato
                   </span>
                 )}
               </div>
@@ -1424,38 +1321,33 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
               </div>
 
               {/* Editable Fields Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 {/* 1. Target Value Input */}
-                <div className="sm:col-span-2">
+                <div>
                   <label className="block text-[11px] font-bold text-zinc-700 dark:text-zinc-300 mb-1 flex items-center justify-between">
                     <span>Valore Obiettivo Programmato (Target):</span>
                     <span className="text-[10px] text-zinc-500 font-normal">Unità: {activeIndicator.unit}</span>
                   </label>
-                  <div className="relative flex items-center">
-                    <input
-                      type="number"
-                      step="any"
-                      value={customTarget !== undefined && !isNaN(customTarget) ? customTarget : ''}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === '') {
-                          setCustomTarget(undefined);
-                        } else {
-                          const num = parseFloat(val);
-                          setCustomTarget(isNaN(num) ? undefined : num);
-                        }
-                      }}
-                      placeholder="Nessun target impostato (inserisci valore desiderato)..."
-                      className={`w-full rounded-lg border bg-white px-3 py-2 text-sm font-black text-zinc-900 focus:outline-none dark:bg-zinc-900 dark:text-zinc-100 ${
-                        activeIndicator.level === 'context'
-                          ? 'border-purple-300 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 dark:border-purple-800'
-                          : 'border-emerald-300 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 dark:border-emerald-800'
-                      }`}
-                    />
-                    <span className="absolute right-3 text-xs font-bold text-zinc-500">
-                      {activeIndicator.unit}
-                    </span>
-                  </div>
+                  <input
+                    type="number"
+                    step="any"
+                    value={customTarget !== undefined && !isNaN(customTarget) ? customTarget : ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setCustomTarget(undefined);
+                      } else {
+                        const num = parseFloat(val);
+                        setCustomTarget(isNaN(num) ? undefined : num);
+                      }
+                    }}
+                    placeholder="Nessun target impostato (inserisci valore)"
+                    className={`w-full rounded-lg border bg-white px-3 py-2 text-sm font-black text-zinc-900 focus:outline-none dark:bg-zinc-900 dark:text-zinc-100 ${
+                      activeIndicator.level === 'context'
+                        ? 'border-purple-300 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 dark:border-purple-800'
+                        : 'border-emerald-300 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 dark:border-emerald-800'
+                    }`}
+                  />
                 </div>
 
                 {/* 2. Target Direction Criteria */}
@@ -1471,29 +1363,6 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
                     <option value="higher-is-better">≥ Incremento (Crescita attesa)</option>
                     <option value="lower-is-better">≤ Contenimento (Soglia massima)</option>
                   </select>
-                </div>
-
-                {/* 3. Baseline / Valore Iniziale */}
-                <div>
-                  <label className="block text-[11px] font-bold text-zinc-700 dark:text-zinc-300 mb-1">
-                    Valore Base / Partenza (opzionale):
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={baselineValue !== undefined && !isNaN(baselineValue) ? baselineValue : ''}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val === '') {
-                        setBaselineValue(undefined);
-                      } else {
-                        const num = parseFloat(val);
-                        setBaselineValue(isNaN(num) ? undefined : num);
-                      }
-                    }}
-                    placeholder="Opzionale (es. 0)"
-                    className="w-full rounded-lg border border-zinc-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-                  />
                 </div>
               </div>
 
@@ -1547,53 +1416,87 @@ export const IndicatorCalculator: React.FC<IndicatorCalculatorProps> = ({
                     </span>
                   </div>
                 </div>
-              ) : (
-                <div className="rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 bg-white/50 dark:bg-zinc-900/50 p-3.5 text-center space-y-1">
-                  <div className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                    Nessun target impostato per questo indicatore
-                  </div>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                    Inserisci un valore obiettivo nel campo sopra per visualizzare l&apos;avanzamento percentuale e lo scostamento.
-                  </p>
-                </div>
-              )}
+              ) : null}
             </div>
-
-            {/* Objective Context Card */}
-            {activeIndicator.objective && (
-              <div className={`space-y-2 text-xs p-3.5 rounded-xl border ${
-                activeIndicator.level === 'context'
-                  ? 'bg-purple-50/50 text-purple-900 dark:bg-purple-950/20 dark:text-purple-200 border-purple-100 dark:border-purple-900/40'
-                  : 'bg-emerald-50/50 text-emerald-900 dark:bg-emerald-950/20 dark:text-emerald-200 border-emerald-100 dark:border-emerald-900/40'
-              }`}>
-                <span className={`font-bold ${
-                  activeIndicator.level === 'context' ? 'text-purple-800 dark:text-purple-300' : 'text-emerald-800 dark:text-emerald-300'
-                }`}>
-                  Obiettivo Strategico Correlato:
-                </span>
-                <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                  {activeIndicator.objective}
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Status riepilogativo di registrazione */}
-          <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-800/40 p-3.5 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-              <Info className="h-4 w-4 text-amber-600 shrink-0" />
-              <span>
-                {existingRecordForCurrent
-                  ? `Rilevazione registrata per ${activeMunInfo.shortName} (${selectedYear}).`
-                  : `Nuova rilevazione per ${activeMunInfo.shortName} (${selectedYear}).`}
-              </span>
-            </div>
-            <span className="text-[11px] font-semibold text-amber-700 dark:text-amber-400">
-              Salvataggio nel pannello parametri 👈
-            </span>
           </div>
         </div>
       </div>
+
+      {/* PANNELLO ORIZZONTALE DEDICATO: OBIETTIVO STRATEGICO CORRELATO & INDICATORI DI OUTPUT INFLUENTI */}
+      {activeIndicator.level === 'context' && (activeIndicator.objective || (contextOutputIndicators && contextOutputIndicators.length > 0)) && (
+        <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
+          {activeIndicator.objective && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300">
+                <Target className="h-4 w-4" />
+                <span>Obiettivo Strategico Correlato a questo Contesto</span>
+              </div>
+              <p className="text-xs sm:text-sm font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed bg-purple-50/60 dark:bg-purple-950/30 p-4 rounded-xl border border-purple-200/80 dark:border-purple-800/60">
+                {activeIndicator.objective}
+              </p>
+            </div>
+          )}
+
+          {contextOutputIndicators && contextOutputIndicators.length > 0 && (
+            <div className={`${activeIndicator.objective ? 'pt-4 border-t border-zinc-100 dark:border-zinc-800 ' : ''}space-y-3`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                  <Zap className="h-4 w-4" />
+                  <span>Indicatori di Output che influiscono su questo Contesto</span>
+                </div>
+                <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                  {contextOutputIndicators.length} {contextOutputIndicators.length === 1 ? 'Indicatore correlato' : 'Indicatori correlati'}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {contextOutputIndicators.map((out) => (
+                  <button
+                    key={out.code}
+                    type="button"
+                    onClick={() => setSelectedOutputCode(out.code)}
+                    className="flex items-center justify-between p-3 rounded-xl border border-zinc-200 bg-zinc-50/70 hover:bg-emerald-50 hover:border-emerald-300 dark:border-zinc-800 dark:bg-zinc-800/60 dark:hover:bg-emerald-950/40 text-left transition-all cursor-pointer group shadow-2xs hover:shadow-xs"
+                    title={`Clicca per calcolare l'indicatore di output ${out.code}`}
+                  >
+                    <div>
+                      {out.name.startsWith(out.code) ? (
+                        <span className="text-xs text-zinc-800 dark:text-zinc-200 font-semibold group-hover:text-emerald-800 dark:group-hover:text-emerald-300">
+                          {out.name}
+                        </span>
+                      ) : (
+                        <div>
+                          <span className="font-mono text-xs font-black text-emerald-700 dark:text-emerald-400">
+                            [{out.code}]
+                          </span>{' '}
+                          <span className="text-xs text-zinc-800 dark:text-zinc-200 font-semibold group-hover:text-emerald-800 dark:group-hover:text-emerald-300">
+                            {out.name}
+                          </span>
+                        </div>
+                      )}
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-0.5 block">
+                        Unità: {out.unit}
+                      </span>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-zinc-400 group-hover:text-emerald-600 shrink-0 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* PANNELLO ORIZZONTALE PER INDICATORI DI OUTPUT: AZIONE / LINEA STRATEGICA DI RIFERIMENTO */}
+      {activeIndicator.level === 'output' && activeIndicator.objective && (
+        <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+            <Target className="h-4 w-4" />
+            <span>Azione / Linea Strategica di Riferimento</span>
+          </div>
+          <p className="text-xs sm:text-sm font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed bg-emerald-50/60 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+            {activeIndicator.objective}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

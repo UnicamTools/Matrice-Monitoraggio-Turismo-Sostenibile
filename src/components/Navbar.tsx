@@ -5,7 +5,6 @@ import {
   TrendingUp,
   FileSpreadsheet,
   Calendar,
-  Layers,
   CheckCircle2,
   HelpCircle,
   Building2,
@@ -47,18 +46,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex flex-col gap-3 py-3 md:flex-row md:items-center md:justify-between">
           {/* Logo & Title */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-600 text-white shadow-sm shadow-amber-500/20">
-                <Layers className="h-5 w-5" />
-              </div>
-              <div>
-                <h1 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                  Matrice Monitoraggio Turismo Sostenibile
-                </h1>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 hidden sm:block">
-                  Montecassiano · Montefano · Montelupone — Calcolo indicatori e monitoraggio
-                </p>
-              </div>
+            <div>
+              <h1 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                MATRICE MONITORAGGIO TURISMO SOSTENIBILE
+              </h1>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 hidden sm:block leading-snug">
+                <span>Calcolo indicatori e monitoraggio.</span>
+                <span className="block">Montecassiano · Montefano · Montelupone</span>
+              </p>
             </div>
 
             {/* Help & Info button mobile */}

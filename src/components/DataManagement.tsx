@@ -417,7 +417,7 @@ export const DataManagement: React.FC<DataManagementProps> = ({
               <Download className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
                 Esporta Dati
               </h3>
               <p className="text-xs text-zinc-500">Salva in locale tutte le rilevazioni</p>
@@ -483,7 +483,7 @@ export const DataManagement: React.FC<DataManagementProps> = ({
               <Upload className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
                 Importa Dataset
               </h3>
               <p className="text-xs text-zinc-500">Carica rilevazioni salvate in precedenza</p>
@@ -520,7 +520,7 @@ export const DataManagement: React.FC<DataManagementProps> = ({
               <Database className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                 <span>Dataset Iniziale</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 font-extrabold">
                   {demoCount} Rilevazioni

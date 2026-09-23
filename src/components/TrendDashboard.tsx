@@ -555,8 +555,8 @@ export const TrendDashboard: React.FC<TrendDashboardProps> = ({
                     </span>
                   </span>
                 </div>
-                <h3 className="text-base font-black text-zinc-900 dark:text-zinc-100">
-                  Serie Temporale Multi-Anno ({isContext ? 'Analisi di Contesto' : 'Prospettive di Intervento'})
+                <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                  Serie Temporale Multi-Anno
                 </h3>
               </div>
             </div>
@@ -610,10 +610,7 @@ export const TrendDashboard: React.FC<TrendDashboardProps> = ({
           <div className="rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/90 dark:bg-zinc-800/60 p-3 space-y-2.5">
             <div className="flex items-center gap-1.5 font-bold text-zinc-800 dark:text-zinc-200 text-xs">
               <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
-              <span>Intervallo Temporale Grafico:</span>
-              <span className="font-mono px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 font-extrabold text-[11px] border border-amber-200 dark:border-amber-800">
-                {chartFilteredYears.length} {chartFilteredYears.length === 1 ? 'anno' : 'anni'} ({trendStartYear} - {trendEndYear})
-              </span>
+              <span>Intervallo Temporale Grafico</span>
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-2.5">
@@ -903,7 +900,7 @@ export const TrendDashboard: React.FC<TrendDashboardProps> = ({
                     <span>Raggiungimento Obiettivi</span>
                   </span>
                 </div>
-                <h3 className="text-base font-black text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
                   Sintesi Prestazioni
                 </h3>
               </div>
