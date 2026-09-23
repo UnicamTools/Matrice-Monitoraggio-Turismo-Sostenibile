@@ -2,22 +2,18 @@ import React, { useState, useMemo } from 'react';
 import {
   CONTEXT_ANALYSIS_SECTIONS,
   INTERVENTION_PERSPECTIVES,
-  DIMENSIONS,
 } from '../data/matrixData';
 import { DimensionId } from '../types';
 import {
-  Search,
   Calculator,
   Info,
   Zap,
-  X,
   LayoutGrid,
   Table as TableIcon,
   Layers,
   Compass,
   ListTree,
   ArrowRight,
-  SlidersHorizontal,
   Target,
   Sparkles,
 } from 'lucide-react';
@@ -34,73 +30,19 @@ export const MatrixExplorer: React.FC<MatrixExplorerProps> = ({
   const [macroSection, setMacroSection] = useState<MacroSection>('context');
   const [selectedDimension, setSelectedDimension] = useState<DimensionId | 'all'>('all');
   const [selectedDirection, setSelectedDirection] = useState<string | 'all'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'cards' | 'grid'>('cards');
 
-  // Filter Context Sections based on filters
+  // Filter Context Sections based on dimension
   const filteredContextSections = useMemo(() => {
-    return CONTEXT_ANALYSIS_SECTIONS.filter((sec) => {
-      // Dimension filter
-      if (selectedDimension !== 'all' && sec.id !== selectedDimension) {
-        return false;
-      }
+    if (selectedDimension === 'all') return CONTEXT_ANALYSIS_SECTIONS;
+    return CONTEXT_ANALYSIS_SECTIONS.filter((sec) => sec.id === selectedDimension);
+  }, [selectedDimension]);
 
-      // Search filter
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase();
-
-      const matchTitle =
-        sec.title.toLowerCase().includes(q) ||
-        sec.description.toLowerCase().includes(q);
-
-      const matchIndicators = sec.contextIndicators.some(
-        (c) =>
-          c.code.toLowerCase().includes(q) ||
-          c.name.toLowerCase().includes(q) ||
-          c.description.toLowerCase().includes(q) ||
-          c.formulaDisplay.toLowerCase().includes(q)
-      );
-
-      return matchTitle || matchIndicators;
-    });
-  }, [selectedDimension, searchQuery]);
-
-  // Filter Intervention Perspectives based on filters
+  // Filter Intervention Perspectives based on direction
   const filteredInterventionPerspectives = useMemo(() => {
-    return INTERVENTION_PERSPECTIVES.filter((persp) => {
-      // Direction filter
-      if (selectedDirection !== 'all' && persp.id !== selectedDirection) {
-        return false;
-      }
-
-      // Search filter
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase();
-
-      const matchTitle =
-        persp.title.toLowerCase().includes(q) ||
-        persp.asseTitle.toLowerCase().includes(q) ||
-        persp.description.toLowerCase().includes(q);
-
-      const matchAzioni = persp.azioni.some(
-        (az) =>
-          az.title.toLowerCase().includes(q) ||
-          az.interventi.some(
-            (int) =>
-              int.title.toLowerCase().includes(q) ||
-              int.outputIndicators.some(
-                (out) =>
-                  out.code.toLowerCase().includes(q) ||
-                  out.name.toLowerCase().includes(q) ||
-                  out.description.toLowerCase().includes(q) ||
-                  out.formulaDisplay.toLowerCase().includes(q)
-              )
-          )
-      );
-
-      return matchTitle || matchAzioni;
-    });
-  }, [selectedDirection, searchQuery]);
+    if (selectedDirection === 'all') return INTERVENTION_PERSPECTIVES;
+    return INTERVENTION_PERSPECTIVES.filter((persp) => persp.id === selectedDirection);
+  }, [selectedDirection]);
 
   // Total counts for summary
   const totalContextIndicatorsCount = useMemo(() => {
@@ -126,9 +68,13 @@ export const MatrixExplorer: React.FC<MatrixExplorerProps> = ({
 
   // Banner Pilastro 1 con filtri Dimensioni integrati
   const renderContextBanner = () => (
-    <div className="p-4 sm:p-5 rounded-2xl bg-purple-100/90 dark:bg-purple-950/60 border-2 border-purple-300 dark:border-purple-800 space-y-3.5 shadow-sm">
+    <div
+      onClick={() => setSelectedDimension('all')}
+      className="p-4 sm:p-5 rounded-2xl bg-purple-100/90 dark:bg-purple-950/60 border-2 border-purple-300 dark:border-purple-800 space-y-3 shadow-sm cursor-pointer"
+      title="Clicca per visualizzare tutte e 4 le Dimensioni"
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 text-left">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-700 text-white dark:bg-purple-900 shadow-xs shrink-0">
             <Layers className="h-5 w-5" />
           </div>
@@ -141,92 +87,63 @@ export const MatrixExplorer: React.FC<MatrixExplorerProps> = ({
             </h3>
           </div>
         </div>
-        <div className="text-xs font-bold text-purple-900 dark:text-purple-200 bg-white/85 dark:bg-zinc-900/85 px-3 py-1.5 rounded-lg border border-purple-200 dark:border-purple-800 self-start sm:self-center shrink-0">
-          {filteredContextSections.reduce((sum, s) => sum + s.contextIndicators.length, 0)} Indicatori di Contesto
+
+        <div className="text-xs font-bold text-purple-900 dark:text-purple-200 bg-white/85 dark:bg-zinc-900/85 px-3 py-1.5 rounded-lg border border-purple-200 dark:border-purple-800 self-start sm:self-center shrink-0 shadow-2xs">
+          {selectedDimension === 'all'
+            ? `${totalContextIndicatorsCount} Indicatori di Contesto`
+            : `${filteredContextSections.reduce((sum, s) => sum + s.contextIndicators.length, 0)} di ${totalContextIndicatorsCount} Indicatori`}
         </div>
       </div>
 
-      {/* Filtri Dimensioni sotto al titolo all'interno del pannello colorato */}
-      <div className="pt-3 border-t border-purple-200/80 dark:border-purple-800/80 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-extrabold text-purple-950 dark:text-purple-200 flex items-center gap-1 mr-1">
-            <SlidersHorizontal className="h-3.5 w-3.5 text-purple-700 dark:text-purple-400" />
-            <span>Filtra Dimensioni:</span>
-          </span>
-          <button
-            type="button"
-            id="btn-filter-dim-all"
-            onClick={() => setSelectedDimension('all')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              selectedDimension === 'all'
-                ? 'bg-purple-700 text-white shadow-xs'
-                : 'bg-white/85 dark:bg-zinc-900/85 text-purple-900 dark:text-purple-200 border border-purple-200 dark:border-purple-700 hover:bg-white'
-            }`}
-          >
-            Tutte (4)
-          </button>
-          {DIMENSIONS.map((dim) => (
+      {/* Elenco delle 4 Dimensioni cliccabili per esteso come filtri */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-purple-200/80 dark:border-purple-800/80">
+        {CONTEXT_ANALYSIS_SECTIONS.map((sec) => {
+          const isSelected = selectedDimension === sec.id;
+          const count = sec.contextIndicators.length;
+          return (
             <button
-              key={dim.id}
+              key={sec.id}
               type="button"
-              id={`btn-filter-dim-${dim.number}`}
-              onClick={() => setSelectedDimension(dim.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                selectedDimension === dim.id
-                  ? 'bg-purple-700 text-white shadow-xs'
-                : 'bg-white/85 dark:bg-zinc-900/85 text-purple-900 dark:text-purple-200 border border-purple-200 dark:border-purple-700 hover:bg-white'
-              }`}
-              title={dim.title}
-            >
-              Dim. {dim.number}
-            </button>
-          ))}
-
-          {(selectedDimension !== 'all' || searchQuery) && (
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedDimension('all');
-                setSearchQuery('');
+              id={`btn-filter-dim-${sec.id}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedDimension(isSelected ? 'all' : (sec.id as DimensionId));
               }}
-              className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold text-purple-800 dark:text-purple-300 hover:text-purple-950 dark:hover:text-purple-100 ml-1 cursor-pointer"
+              className={`flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                isSelected
+                  ? 'bg-purple-700 text-white border-purple-700 shadow-sm ring-2 ring-purple-600/30'
+                  : 'bg-white/90 dark:bg-zinc-900/90 hover:bg-white dark:hover:bg-zinc-800 text-purple-950 dark:text-purple-100 border border-purple-200/90 dark:border-purple-800/80 shadow-2xs'
+              }`}
+              title={sec.title}
             >
-              <X className="h-3.5 w-3.5" />
-              <span>Resetta</span>
+              <span className="text-xs sm:text-sm font-bold leading-snug">
+                {sec.title}
+              </span>
+              <span
+                className={`shrink-0 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full ${
+                  isSelected
+                    ? 'bg-purple-900/90 text-purple-100'
+                    : 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60'
+                }`}
+              >
+                {count} Indicatori
+              </span>
             </button>
-          )}
-        </div>
-
-        {/* Ricerca rapida */}
-        <div className="relative w-full md:w-60 shrink-0">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
-          <input
-            type="text"
-            id="search-context-indicators"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cerca indicatore (es. CTX-1)..."
-            className="w-full rounded-lg border border-purple-200 dark:border-purple-700 bg-white/90 dark:bg-zinc-900/90 pl-8.5 pr-7 py-1.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder-purple-400/80 dark:placeholder-purple-400/60 focus:border-purple-500 focus:outline-none"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-purple-400 hover:text-purple-700 dark:hover:text-purple-200"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          )}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
 
   // Banner Pilastro 2 con filtri Direzioni integrati
   const renderInterventionBanner = () => (
-    <div className="p-4 sm:p-5 rounded-2xl bg-emerald-100/90 dark:bg-emerald-950/60 border-2 border-emerald-300 dark:border-emerald-800 space-y-3.5 shadow-sm">
+    <div
+      onClick={() => setSelectedDirection('all')}
+      className="p-4 sm:p-5 rounded-2xl bg-emerald-100/90 dark:bg-emerald-950/60 border-2 border-emerald-300 dark:border-emerald-800 space-y-3 shadow-sm cursor-pointer"
+      title="Clicca per visualizzare tutte e 4 le Direzioni"
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 text-left">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-700 text-white dark:bg-emerald-900 shadow-xs shrink-0">
             <Compass className="h-5 w-5" />
           </div>
@@ -239,94 +156,65 @@ export const MatrixExplorer: React.FC<MatrixExplorerProps> = ({
             </h3>
           </div>
         </div>
-        <div className="text-xs font-bold text-emerald-900 dark:text-emerald-200 bg-white/85 dark:bg-zinc-900/85 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800 self-start sm:self-center shrink-0">
-          {filteredInterventionPerspectives.reduce((sum, p) => {
-            return (
-              sum +
-              p.azioni.reduce(
-                (azSum, a) =>
-                  azSum +
-                  a.interventi.reduce((intSum, i) => intSum + i.outputIndicators.length, 0),
-                0
-              )
-            );
-          }, 0)}{' '}
-          Indicatori di Output
+
+        <div className="text-xs font-bold text-emerald-900 dark:text-emerald-200 bg-white/85 dark:bg-zinc-900/85 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800 self-start sm:self-center shrink-0 shadow-2xs">
+          {selectedDirection === 'all'
+            ? `${totalOutputIndicatorsCount} Indicatori di Output`
+            : `${filteredInterventionPerspectives.reduce((sum, p) => {
+                return (
+                  sum +
+                  p.azioni.reduce(
+                    (azSum, a) =>
+                      azSum +
+                      a.interventi.reduce((intSum, i) => intSum + i.outputIndicators.length, 0),
+                    0
+                  )
+                );
+              }, 0)} di ${totalOutputIndicatorsCount} Output`}
         </div>
       </div>
 
-      {/* Filtri Direzioni sotto al titolo all'interno del pannello colorato */}
-      <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/80 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-extrabold text-emerald-950 dark:text-emerald-200 flex items-center gap-1 mr-1">
-            <SlidersHorizontal className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" />
-            <span>Filtra Direzioni:</span>
-          </span>
-          <button
-            type="button"
-            id="btn-filter-dir-all"
-            onClick={() => setSelectedDirection('all')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              selectedDirection === 'all'
-                ? 'bg-emerald-700 text-white shadow-xs'
-                : 'bg-white/85 dark:bg-zinc-900/85 text-emerald-900 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-700 hover:bg-white'
-            }`}
-          >
-            Tutte (4)
-          </button>
-          {INTERVENTION_PERSPECTIVES.map((persp) => (
+      {/* Elenco delle 4 Direzioni strategiche cliccabili per esteso come filtri */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-emerald-200/80 dark:border-emerald-800/80">
+        {INTERVENTION_PERSPECTIVES.map((persp) => {
+          const isSelected = selectedDirection === persp.id;
+          const count = persp.azioni.reduce(
+            (azSum, a) =>
+              azSum +
+              a.interventi.reduce((intSum, i) => intSum + i.outputIndicators.length, 0),
+            0
+          );
+          return (
             <button
               key={persp.id}
               type="button"
-              id={`btn-filter-dir-${persp.number}`}
-              onClick={() => setSelectedDirection(persp.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                selectedDirection === persp.id
-                  ? 'bg-emerald-700 text-white shadow-xs'
-                  : 'bg-white/85 dark:bg-zinc-900/85 text-emerald-900 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-700 hover:bg-white'
+              id={`btn-filter-dir-${persp.id}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedDirection(isSelected ? 'all' : persp.id);
+              }}
+              className={`flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                isSelected
+                  ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm ring-2 ring-emerald-600/30'
+                  : 'bg-white/90 dark:bg-zinc-900/90 hover:bg-white dark:hover:bg-zinc-800 text-emerald-950 dark:text-emerald-100 border border-emerald-200/90 dark:border-emerald-800/80 shadow-2xs'
               }`}
               title={persp.title}
             >
-              Dir. {persp.number}
+              <span className="text-xs sm:text-sm font-bold leading-snug">
+                {persp.title}
+              </span>
+              <span
+                className={`shrink-0 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full ${
+                  isSelected
+                    ? 'bg-emerald-900/90 text-emerald-100'
+                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60'
+                }`}
+              >
+                {count} Output
+              </span>
             </button>
-          ))}
-
-          {(selectedDirection !== 'all' || searchQuery) && (
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedDirection('all');
-                setSearchQuery('');
-              }}
-              className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:text-emerald-950 dark:hover:text-emerald-100 ml-1 cursor-pointer"
-            >
-              <X className="h-3.5 w-3.5" />
-              <span>Resetta</span>
-            </button>
-          )}
-        </div>
-
-        {/* Ricerca rapida */}
-        <div className="relative w-full md:w-60 shrink-0">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-          <input
-            type="text"
-            id="search-intervention-indicators"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cerca azione o output..."
-            className="w-full rounded-lg border border-emerald-200 dark:border-emerald-700 bg-white/90 dark:bg-zinc-900/90 pl-8.5 pr-7 py-1.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder-emerald-500/80 dark:placeholder-emerald-400/60 focus:border-emerald-500 focus:outline-none"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-200"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          )}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -335,8 +223,9 @@ export const MatrixExplorer: React.FC<MatrixExplorerProps> = ({
     <div className="space-y-6">
       {/* Intro Banner with conceptual clarity */}
       <div className="rounded-2xl border border-zinc-200 bg-gradient-to-br from-purple-50/90 via-white to-emerald-50/80 p-6 sm:p-7 dark:border-zinc-800 dark:from-purple-950/30 dark:via-zinc-900 dark:to-emerald-950/30 shadow-sm space-y-4">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="space-y-2">
+        {/* Intestazione: Etichetta ambra + Titolo a sinistra, Tasti Vista a destra */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                 <TableIcon className="h-4 w-4" />
@@ -346,52 +235,58 @@ export const MatrixExplorer: React.FC<MatrixExplorerProps> = ({
             <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight mt-0.5">
               Cruscotto della Matrice: Analisi di Contesto &amp; Prospettive di Intervento
             </h2>
-            <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 space-y-1 max-w-3xl leading-relaxed">
-              <p>La matrice è organizzata nei suoi due pilastri distinti:</p>
-              <div className="space-y-0.5 pl-0.5">
-                <div>
-                  <strong className="font-bold text-purple-700 dark:text-purple-300">
-                    1) Analisi di Contesto
-                  </strong>{' '}
-                  (profilo turistico-ambientale articolato in 4 dimensioni e 15 indicatori di contesto)
-                </div>
-                <div>
-                  <strong className="font-bold text-emerald-700 dark:text-emerald-300">
-                    2) Prospettive di Intervento
-                  </strong>{' '}
-                  (direzioni strategiche, assi, azioni operative e indicatori di output estratti criticamente dal quadro diagnostico complessivo).
-                </div>
-              </div>
-            </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0 self-start lg:self-center">
+          {/* View Mode Toggle Buttons - Perfettamente allineati a destra */}
+          <div className="flex items-center p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shrink-0 self-start md:self-auto">
             <button
+              type="button"
               onClick={() => setViewMode('cards')}
-              className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-lg border transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 viewMode === 'cards'
-                  ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 dark:border-zinc-100 shadow-sm'
-                  : 'bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700'
+                  ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-700'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
               }`}
             >
-              <LayoutGrid className="h-4 w-4" />
+              <LayoutGrid className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               <span>Vista Schede</span>
             </button>
+
             <button
+              type="button"
               onClick={() => setViewMode('grid')}
-              className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-lg border transition-all ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 viewMode === 'grid'
-                  ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 dark:border-zinc-100 shadow-sm'
-                  : 'bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700'
+                  ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-700'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
               }`}
             >
-              <TableIcon className="h-4 w-4" />
+              <TableIcon className="h-4 w-4 text-amber-600 dark:text-amber-400" />
               <span>Vista Tabella</span>
             </button>
           </div>
         </div>
 
-        {/* Macro Structure Switcher */}
+        {/* Scritte descrittive grigie a tutta larghezza per distendersi su una riga ciascuna */}
+        <div className="text-xs text-zinc-500 dark:text-zinc-400 space-y-1.5 w-full leading-relaxed">
+          <p>La matrice è organizzata nei suoi due pilastri distinti:</p>
+          <div className="space-y-1 pl-0.5">
+            <div className="w-full">
+              <strong className="font-bold text-purple-700 dark:text-purple-300">
+                1) Analisi di Contesto
+              </strong>
+              , che delinea il profilo turistico ambientale del Comune attraverso Indicatori di Contesto (15 Indicatori distribuiti su 4 Dimensioni di analisi)
+            </div>
+            <div className="w-full">
+              <strong className="font-bold text-emerald-700 dark:text-emerald-300">
+                2) Prospettive di Intervento
+              </strong>
+              , che individua le linee strategiche estratte criticamente dal quadro diagnostico complessivo e monitora i risultati delle azioni implementate tramite Indicatori di Output (43 Indicatori di Output distribuiti su 4 Direzioni chiave).
+            </div>
+          </div>
+        </div>
+
+        {/* Macro Structure Switcher - Solo i titoli nei tasti colorati */}
         <div className="pt-2 border-t border-zinc-200/80 dark:border-zinc-800/80 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
@@ -400,30 +295,14 @@ export const MatrixExplorer: React.FC<MatrixExplorerProps> = ({
               setMacroSection('context');
               setSelectedDirection('all');
             }}
-            className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`py-3 px-4 rounded-xl border font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 ${
               macroSection === 'context'
                 ? 'bg-purple-700 text-white border-purple-700 shadow-sm ring-2 ring-purple-600/30 dark:ring-purple-400/30'
                 : 'bg-purple-50/70 dark:bg-purple-950/30 text-purple-950 dark:text-purple-200 border-purple-200 dark:border-purple-800/60 hover:bg-purple-100/70 dark:hover:bg-purple-900/40'
             }`}
           >
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider flex items-center gap-2">
-                <Layers className="h-4 w-4" />
-                <span>1. Analisi di Contesto</span>
-              </span>
-              <span
-                className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                  macroSection === 'context'
-                    ? 'bg-purple-900 text-purple-100'
-                    : 'bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-300'
-                }`}
-              >
-                {totalContextIndicatorsCount} Indicatori
-              </span>
-            </div>
-            <p className="text-xs opacity-85 leading-tight">
-              4 Dimensioni di analisi e indicatori di contesto diagnostici (CTX-1...CTX-15).
-            </p>
+            <Layers className="h-4 w-4 shrink-0" />
+            <span>1. ANALISI DI CONTESTO</span>
           </button>
 
           <button
@@ -433,30 +312,14 @@ export const MatrixExplorer: React.FC<MatrixExplorerProps> = ({
               setMacroSection('intervention');
               setSelectedDimension('all');
             }}
-            className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`py-3 px-4 rounded-xl border font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 ${
               macroSection === 'intervention'
                 ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm ring-2 ring-emerald-600/30 dark:ring-emerald-400/30'
                 : 'bg-emerald-50/70 dark:bg-emerald-950/30 text-emerald-950 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100/70 dark:hover:bg-emerald-900/40'
             }`}
           >
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider flex items-center gap-2">
-                <Compass className="h-4 w-4" />
-                <span>2. Prospettive di Intervento</span>
-              </span>
-              <span
-                className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                  macroSection === 'intervention'
-                    ? 'bg-emerald-900 text-emerald-100'
-                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300'
-                }`}
-              >
-                {totalOutputIndicatorsCount} Output
-              </span>
-            </div>
-            <p className="text-xs opacity-85 leading-tight">
-              4 Direzioni strategiche, Assi d&apos;intervento, Azioni, Interventi e Indicatori di Output.
-            </p>
+            <Compass className="h-4 w-4 shrink-0" />
+            <span>2. PROSPETTIVE DI INTERVENTO</span>
           </button>
         </div>
       </div>

@@ -320,85 +320,84 @@ export const DataManagement: React.FC<DataManagementProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner / Pannello Iniziale */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="max-w-2xl">
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-7 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                 <FileSpreadsheet className="h-4 w-4" />
                 <span>Modulo di Esportazione, Importazione &amp; Report</span>
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 mt-0.5">
+            <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight mt-0.5">
               Gestione Dati, Export e Reportistica
             </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-              Esporta i calcoli effettuati, importa dataset esistenti o genera un report sintetico per la giunta ed il piano strategico del turismo.
-            </p>
           </div>
 
-          {/* Azioni Report e Scelta Ambito in alto a destra */}
-          <div className="flex flex-col items-start lg:items-end gap-2.5 shrink-0">
-            {/* Pulsanti Azione Report */}
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setShowReportModal(true)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 text-white font-bold text-xs sm:text-sm shadow-sm hover:bg-amber-700 transition-colors cursor-pointer ring-1 ring-amber-500"
-                title="Apri l'anteprima a schermo del report completo di grafici e indicatori"
-              >
-                <FileText className="h-4 w-4" />
-                <span>
-                  Anteprima Report ({reportScope === 'all' ? '3 Comuni' : currentMunInfo.shortName} • {selectedYear})
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={handleDownloadPdf}
-                disabled={isGeneratingPdf}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold text-xs sm:text-sm shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors cursor-pointer disabled:opacity-50"
-                title={`Scarica il report in PDF per ${reportScope === 'all' ? 'tutti i 3 Comuni' : selectedMunicipality}`}
-              >
-                <FileDown className="h-4 w-4 text-amber-500" />
-                <span>
-                  {isGeneratingPdf
-                    ? 'Generazione...'
-                    : `Scarica PDF (${reportScope === 'all' ? '3 Comuni' : currentMunInfo.shortName} • ${selectedYear})`}
-                </span>
-              </button>
-            </div>
+          {/* Scelta Ambito del Report con lo stesso stile del Modulo di Valutazione Prestazioni & Trend */}
+          <div className="flex items-center p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shrink-0 self-start md:self-auto">
+            <button
+              type="button"
+              onClick={() => setReportScope('current')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                reportScope === 'current'
+                  ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-700'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+              }`}
+              title="Genera il report per il singolo comune selezionato in basso"
+            >
+              <Building className="h-4 w-4 text-amber-600" />
+              <span>Risultati Singolo Ente</span>
+            </button>
 
-            {/* Scelta Ambito del Report con le stesse dimensioni e stile del Modulo di Valutazione Prestazioni & Trend */}
-            <div className="flex items-center p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shrink-0">
-              <button
-                type="button"
-                onClick={() => setReportScope('current')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  reportScope === 'current'
-                    ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-700'
-                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
-                }`}
-                title="Genera il report per il singolo comune selezionato in basso"
-              >
-                <Building className="h-4 w-4 text-amber-600" />
-                <span>Risultati Singolo Ente</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setReportScope('all')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  reportScope === 'all'
-                    ? 'bg-amber-600 text-white shadow-sm ring-1 ring-amber-500'
-                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
-                }`}
-                title="Genera il report integrato per tutti i 3 Comuni (Montecassiano, Montefano, Montelupone)"
-              >
-                <Globe className="h-4 w-4" />
-                <span>Report Integrato (3 Comuni)</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setReportScope('all')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                reportScope === 'all'
+                  ? 'bg-amber-600 text-white shadow-sm ring-1 ring-amber-500'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+              }`}
+              title="Genera il report integrato per tutti i 3 Comuni (Montecassiano, Montefano, Montelupone)"
+            >
+              <Globe className="h-4 w-4" />
+              <span>Report Integrato (3 Comuni)</span>
+            </button>
           </div>
+        </div>
+
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          Esporta i calcoli effettuati, importa dataset esistenti o genera un report sintetico per la giunta ed il piano strategico del turismo.
+        </p>
+
+        {/* Tasti Anteprima Report e Scarica PDF al posto dei tasti macro */}
+        <div className="pt-2 border-t border-zinc-200/80 dark:border-zinc-800/80 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => setShowReportModal(true)}
+            className="py-3 px-4 rounded-xl border border-amber-500 bg-amber-600 text-white hover:bg-amber-700 shadow-sm shadow-amber-600/30 ring-1 ring-amber-500 font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2"
+            title="Apri l'anteprima a schermo del report completo di grafici e indicatori"
+          >
+            <FileText className="h-4 w-4 shrink-0" />
+            <span>
+              Anteprima Report ({reportScope === 'all' ? '3 Comuni' : currentMunInfo.shortName} • {selectedYear})
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDownloadPdf}
+            disabled={isGeneratingPdf}
+            className="py-3 px-4 rounded-xl border border-amber-500 bg-amber-600 text-white hover:bg-amber-700 shadow-sm shadow-amber-600/30 ring-1 ring-amber-500 font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+            title={`Scarica il report in PDF per ${reportScope === 'all' ? 'tutti i 3 Comuni' : selectedMunicipality}`}
+          >
+            <FileDown className="h-4 w-4 shrink-0 text-white" />
+            <span>
+              {isGeneratingPdf
+                ? 'Generazione in corso...'
+                : `Scarica PDF (${reportScope === 'all' ? '3 Comuni' : currentMunInfo.shortName} • ${selectedYear})`}
+            </span>
+          </button>
         </div>
 
         {notification && (

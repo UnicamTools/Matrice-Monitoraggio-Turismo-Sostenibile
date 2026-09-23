@@ -432,9 +432,9 @@ export const TrendDashboard: React.FC<TrendDashboardProps> = ({
   }, [currentYearRecords, activeMunRecords, activeMetricFilter]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* SEZIONE SWITCHER PRINCIPALE: RISULTATI SEPARATI PER ENTE vs GRAFICI DI CONFRONTO INTERCOMUNALE */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-4 sm:p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+      <div className="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-7 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
@@ -443,16 +443,13 @@ export const TrendDashboard: React.FC<TrendDashboardProps> = ({
                 <span>Modulo di Valutazione Prestazioni &amp; Trend Storico</span>
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 mt-0.5">
+            <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight mt-0.5">
               Monitoraggio, Trend &amp; Valutazione
             </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-              Visualizza i risultati analizzando i dati separatamente per singolo comune o esplora i grafici di confronto intercomunale.
-            </p>
           </div>
 
           {/* View Mode Toggle Buttons */}
-          <div className="flex items-center p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shrink-0">
+          <div className="flex items-center p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shrink-0 self-start md:self-auto">
             <button
               type="button"
               onClick={() => setDashboardViewMode('single')}
@@ -481,66 +478,38 @@ export const TrendDashboard: React.FC<TrendDashboardProps> = ({
           </div>
         </div>
 
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          Visualizza i risultati analizzando i dati separatamente per singolo comune o esplora i grafici di confronto intercomunale.
+        </p>
+
         {/* Macro Structure Switcher (Analisi di Contesto vs Prospettive di Intervento) */}
-        <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="pt-2 border-t border-zinc-200/80 dark:border-zinc-800/80 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
             id="btn-trend-macro-context"
             onClick={() => handleSwitchMacroSection('context')}
-            className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`py-3 px-4 rounded-xl border font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 ${
               macroSection === 'context'
                 ? 'bg-purple-700 text-white border-purple-700 shadow-sm ring-2 ring-purple-600/30 dark:ring-purple-400/30'
                 : 'bg-purple-50/70 dark:bg-purple-950/30 text-purple-950 dark:text-purple-200 border-purple-200 dark:border-purple-800/60 hover:bg-purple-100/70 dark:hover:bg-purple-900/40'
             }`}
           >
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider flex items-center gap-2">
-                <Layers className="h-4 w-4" />
-                <span>1. Analisi di Contesto</span>
-              </span>
-              <span
-                className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                  macroSection === 'context'
-                    ? 'bg-purple-900 text-purple-100'
-                    : 'bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-300'
-                }`}
-              >
-                15 Indicatori
-              </span>
-            </div>
-            <p className="text-xs opacity-85 leading-tight">
-              4 Dimensioni di analisi e 15 indicatori di contesto diagnostici (CTX-1...CTX-15).
-            </p>
+            <Layers className="h-4 w-4 shrink-0" />
+            <span>1. ANALISI DI CONTESTO</span>
           </button>
 
           <button
             type="button"
             id="btn-trend-macro-intervention"
             onClick={() => handleSwitchMacroSection('interventions')}
-            className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`py-3 px-4 rounded-xl border font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2 ${
               macroSection === 'interventions'
                 ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm ring-2 ring-emerald-600/30 dark:ring-emerald-400/30'
                 : 'bg-emerald-50/70 dark:bg-emerald-950/30 text-emerald-950 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100/70 dark:hover:bg-emerald-900/40'
             }`}
           >
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider flex items-center gap-2">
-                <Compass className="h-4 w-4" />
-                <span>2. Prospettive di Intervento</span>
-              </span>
-              <span
-                className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                  macroSection === 'interventions'
-                    ? 'bg-emerald-900 text-emerald-100'
-                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300'
-                }`}
-              >
-                43 Output
-              </span>
-            </div>
-            <p className="text-xs opacity-85 leading-tight">
-              4 Direzioni strategiche, Assi d&apos;intervento, Azioni e Indicatori di Output.
-            </p>
+            <Compass className="h-4 w-4 shrink-0" />
+            <span>2. PROSPETTIVE DI INTERVENTO</span>
           </button>
         </div>
       </div>
